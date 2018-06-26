@@ -5,8 +5,8 @@ from cherrypy.process.plugins import Daemonizer, PIDFile
 import requests
 
 cur_dir = os.path.abspath(os.path.dirname(__file__))
-key_path = os.path.join(cur_dir, "../../key.pem")
-cert_path = os.path.join(cur_dir, "../../cert.pem")
+key_path = os.path.join(cur_dir, "./key.pem")
+cert_path = os.path.join(cur_dir, "./cert.pem")
 
 
 class Root:
