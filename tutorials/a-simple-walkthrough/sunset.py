@@ -5,8 +5,8 @@ from cherrypy.process.plugins import Daemonizer, PIDFile
 import requests
 
 cur_dir = os.path.abspath(os.path.dirname(__file__))
-key_path = os.path.join(cur_dir, "key.pem")
-cert_path = os.path.join(cur_dir, "cert.pem")
+key_path = os.path.join(cur_dir, os.environ.get("SSL_KEY", "key.pem"))
+cert_path = os.path.join(cur_dir, os.environ.get("SSL_CRT", "cert.pem"))
 
 
 class Root:
@@ -30,6 +30,7 @@ def run():
     cherrypy.config.update({
         "environment": "production",
         "log.screen": True,
+        "server.socket_host": "0.0.0.0",
         "server.socket_port": 8443,
         "server.ssl_module": "builtin",
         "server.ssl_private_key": key_path,
