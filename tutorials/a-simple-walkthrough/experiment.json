@@ -89,7 +89,7 @@
     "rollbacks": [
         {
             "type": "action",
-            "name": "swap-to-vald-cert",
+            "name": "swap-to-valid-cert",
             "provider": {
                 "type": "process",
                 "path": "cp",
