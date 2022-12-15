@@ -5,16 +5,17 @@ from cherrypy.process.plugins import Daemonizer, PIDFile
 import requests
 
 cur_dir = os.path.abspath(os.path.dirname(__file__))
-key_path = os.path.join(cur_dir, "key.pem")
-cert_path = os.path.join(cur_dir, "cert.pem")
-
+key_path = os.path.join(cur_dir, os.environ.get("SSL_KEY", "key.pem"))
+cert_path = os.path.join(cur_dir, os.environ.get("SSL_CRT", "cert.pem"))
+astre_svc = os.environ.get("ASTRE_SERVICE", "localhost")
+astre_cert_path = os.environ.get("ASTRE_SSL_CRT", "cert.pem")
 
 class Root:
     @cherrypy.expose
     def city(self, name):
-        r = requests.post("https://localhost:8444/", timeout=(2, 2), json={
+        r = requests.post("https://{}:8444/".format(astre_svc), timeout=(2, 2), json={
             "city": name
-        }, verify=cert_path)
+        }, verify=astre_cert_path)
 
         if r.status_code != 200:
             raise cherrypy.HTTPError(500, r.text)
@@ -30,6 +31,7 @@ def run():
     cherrypy.config.update({
         "environment": "production",
         "log.screen": True,
+        "server.socket_host": "0.0.0.0",
         "server.socket_port": 8443,
         "server.ssl_module": "builtin",
         "server.ssl_private_key": key_path,
